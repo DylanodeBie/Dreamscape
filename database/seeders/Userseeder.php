@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
         User::insert([
             [
-                'role_id' => 1, 
+                'role_id' => 2, 
                 'name' => 'Dylano',
                 'username' => 'Dylano12345',
                 'password' => Hash::make('test12345'),
@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
                 'bio' => 'Collector of rare items',
             ],
             [
-                'role_id' => 2, 
+                'role_id' => 1, 
                 'name' => 'Bob',
                 'username' => 'bob456',
                 'password' => Hash::make('password'),
