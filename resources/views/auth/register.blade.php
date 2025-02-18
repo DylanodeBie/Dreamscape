@@ -9,6 +9,12 @@
         </div>
 
         <div class="mb-4">
+            <x-input-label for="username" :value="__('Gebruikersnaam')" />
+            <x-text-input id="username" class="block w-full mt-1 border border-gray-300 p-2 rounded-lg" type="text" name="username" :value="old('username')" required autocomplete="username" />
+            <x-input-error :messages="$errors->get('username')" class="mt-2 text-red-600" />
+        </div>
+
+        <div class="mb-4">
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block w-full mt-1 border border-gray-300 p-2 rounded-lg" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-600" />

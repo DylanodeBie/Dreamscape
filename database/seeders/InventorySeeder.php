@@ -12,22 +12,9 @@ class InventorySeeder extends Seeder
      */
     public function run(): void
     {
-        Inventory::insert([
-            [
-                'user_id' => 1,
-                'item_id' => 1,
-                'quantity' => 5,
-            ],
-            [
-                'user_id' => 1,
-                'item_id' => 2,
-                'quantity' => 2,
-            ],
-            [
-                'user_id' => 2,
-                'item_id' => 3,
-                'quantity' => 1,
-            ],
+        // Maak 50 inventory items aan
+        \App\Models\Inventory::factory()->count(50)->create([
+            'user_id' => 1, // Zorg ervoor dat alle items naar user_id 11 gaan
         ]);
     }
 }

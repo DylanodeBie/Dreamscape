@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Inventory extends Model
 {
+    use HasFactory;
+
     protected $table = 'inventory';
 
     protected $fillable = [
@@ -20,8 +23,8 @@ class Inventory extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function item(): BelongsTo
+    public function item()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Item::class, 'item_id');
     }
 }

@@ -22,14 +22,6 @@ class UserSeeder extends Seeder
                 'email' => 'dqdebie@gmail.com',
                 'bio' => 'Collector of rare items',
             ],
-            [
-                'role_id' => 1, 
-                'name' => 'Bob',
-                'username' => 'bob456',
-                'password' => Hash::make('password'),
-                'email' => 'bob@example.com',
-                'bio' => 'Trader and warrior',
-            ],
         ]);
     }
 }
