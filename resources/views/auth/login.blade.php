@@ -6,10 +6,11 @@
         @csrf
 
         <!-- Email Address -->
+        <!-- Gebruikersnaam of E-mail -->
         <div class="mb-4">
-            <x-input-label for="email" class="text-gray-700" :value="__('Email')" />
-            <x-text-input id="email" class="block w-full bg-white border border-gray-300 text-gray-900 p-2 rounded-lg mt-1" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2 text-red-600" />
+            <x-input-label for="login" class="text-gray-700" :value="__('Gebruikersnaam of E-mail')" />
+            <x-text-input id="login" class="block w-full bg-white border border-gray-300 text-gray-900 p-2 rounded-lg mt-1" type="text" name="login" :value="old('login')" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('login')" class="mt-2 text-red-600" />
         </div>
 
         <!-- Password -->
