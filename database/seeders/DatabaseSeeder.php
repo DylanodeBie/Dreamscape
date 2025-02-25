@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->count(10)->create();
         Item::factory()->count(50)->create();
-        Inventory::factory()->count(50)->create();
 
         $this->call([
             TradeSeeder::class,

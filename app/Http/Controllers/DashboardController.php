@@ -2,66 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventory;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Toon de inventaris van de ingelogde gebruiker.
      */
     public function index()
     {
-        // Haal de inventory van de ingelogde gebruiker op met de bijbehorende item gegevens
         $inventory = auth()->user()->inventory()->with('item')->get();
-
-        return view('dashboard', compact('inventory'));
+        return view('inventory.dashboard', compact('inventory'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Toon een specifiek inventarisitem.
      */
-    public function create()
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $inventoryItem = Inventory::where('user_id', auth()->id())->with('item')->findOrFail($id);
+        return view('inventory.show', compact('inventoryItem'));
     }
 }
