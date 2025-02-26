@@ -8,17 +8,35 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
 
-        // Haal alle item-ID's op die de gebruiker al in zijn inventory heeft
-        $ownedItemIds = $user->inventory()->pluck('item_id')->toArray();
+        // Haal de zoek- en filterwaarden op
+        $search = $request->input('search');
+        $type = $request->input('type');
+        $rarity = $request->input('rarity');
 
-        // Haal alle items op die nog NIET in de inventory zitten
-        $products = Item::whereNotIn('id', $ownedItemIds)->get();
+        // Query opbouwen met filters
+        $query = Item::query();
 
-        return view('shop.index', compact('products'));
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        }
+
+        if ($type) {
+            $query->where('type', $type);
+        }
+
+        if ($rarity) {
+            $query->where('rarity', $rarity);
+        }
+
+        // Pagineren (6 items per pagina)
+        $products = $query->paginate(6);
+
+        return view('shop.index', compact('products', 'search', 'type', 'rarity'));
     }
 
     public function addToInventory($itemId)
@@ -32,24 +50,27 @@ class ShopController extends Controller
             return redirect()->back()->with('error', 'Dit item is niet te koop.');
         }
 
-        // Controleer of de gebruiker genoeg geld heeft (verondersteld dat de gebruiker een 'balance' kolom heeft)
+        // Controleer of de gebruiker genoeg geld heeft
         if ($user->balance < $shopItem->price) {
             return redirect()->back()->with('error', 'Je hebt niet genoeg geld voor dit item.');
         }
 
-        // Controleer of het item al in de inventaris zit
-        if ($user->inventory()->where('item_id', $itemId)->exists()) {
-            return redirect()->back()->with('error', 'Dit item zit al in je inventaris.');
-        }
-
-        // Trek geld af
         $user->save();
 
-        // Voeg het item toe aan de inventory
-        $user->inventory()->create([
-            'item_id' => $itemId,
-            'quantity' => 1,
-        ]);
+        // Controleer of het item al in de inventaris zit
+        $inventoryItem = $user->inventory()->where('item_id', $itemId)->first();
+
+        if ($inventoryItem) {
+            // Als het item al in de inventaris zit, verhoog de hoeveelheid
+            $inventoryItem->quantity += 1;
+            $inventoryItem->save();
+        } else {
+            // Anders voeg een nieuw item toe aan de inventaris
+            $user->inventory()->create([
+                'item_id' => $itemId,
+                'quantity' => 1,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Item toegevoegd aan je inventaris!');
     }
